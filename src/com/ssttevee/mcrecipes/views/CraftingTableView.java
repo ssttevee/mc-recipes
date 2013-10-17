@@ -1,8 +1,8 @@
 package com.ssttevee.mcrecipes.views;
 
 import com.ssttevee.mcrecipes.R;
+import com.ssttevee.mcrecipes.helper.Recipe;
 import com.ssttevee.mcrecipes.helper.VanillaItems;
-import com.ssttevee.mcrecipes.recipe.Recipe;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,7 +18,7 @@ public class CraftingTableView extends ImageView {
 	
 	private Recipe r = null;
 	private SparseArray<Bitmap> itemBitmaps = new SparseArray<Bitmap>();
-	private SparseArray<int[]> itemMats = new SparseArray<int[]>();
+	private SparseArray<Integer[]> itemMats = new SparseArray<Integer[]>();
 	
 	private Paint mPaint;
 	private Bitmap mFrame;
@@ -87,7 +87,7 @@ public class CraftingTableView extends ImageView {
 						while(!stop) {
 							Thread.sleep(1250);
 							postInvalidate();
-							if(matStep <= itemMats.valueAt(0).length) matStep++;
+							if(matStep <= itemMats.valueAt(9).length - 2) matStep++;
 							else matStep = 0;
 						}
 					} catch (InterruptedException e) {
@@ -172,16 +172,16 @@ public class CraftingTableView extends ImageView {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), VanillaItems.getResourceIdFromItemId(r.getResult()), options);
         itemBitmaps.put(r.getResult(), bitmap);
 
-    	if(VanillaItems.isTool(r.getResult())) {
+    	if(VanillaItems.hasMultiMats(r.getResult())) {
     		
 	    	r.setMultiMat(true);
 	    	for (int i = 0; i < r.getRecipe().size(); i++) {
 	    		int item = r.getRecipe().get(i);
-	    		itemMats.append(i, VanillaItems.getCorrespondingSet(item));
+	    		itemMats.append(i, VanillaItems.getCorrespondingSet(r.getResult(), item));
 	    		
-	    		if(VanillaItems.getCorrespondingSet(item) != null)
-		    		for (int j = 0; j < VanillaItems.getCorrespondingSet(item).length; j++) {
-		    			int mat = VanillaItems.getCorrespondingSet(item)[j];
+	    		if(VanillaItems.getCorrespondingSet(r.getResult(), item) != null)
+		    		for (int j = 0; j < VanillaItems.getCorrespondingSet(r.getResult(), item).length; j++) {
+		    			int mat = VanillaItems.getCorrespondingSet(r.getResult(), item)[j];
 		        		if(itemBitmaps.get(mat) == null) {
 		        	        Bitmap bmap = BitmapFactory.decodeResource(getResources(), VanillaItems.getResourceIdFromItemId(mat), options);
 		        	        itemBitmaps.put(mat, bmap);
@@ -189,11 +189,11 @@ public class CraftingTableView extends ImageView {
 					}
 			}
 
-    		itemMats.append(9, VanillaItems.getCorrespondingSet(r.getResult()));
+    		itemMats.append(9, VanillaItems.getCorrespondingSet(r.getResult(), r.getResult()));
 
-    		if(VanillaItems.getCorrespondingSet(r.getResult()) != null)
-	    		for (int j = 0; j < VanillaItems.getCorrespondingSet(r.getResult()).length; j++) {
-	    			int mat = VanillaItems.getCorrespondingSet(r.getResult())[j];
+    		if(VanillaItems.getCorrespondingSet(r.getResult(), r.getResult()) != null)
+	    		for (int j = 0; j < VanillaItems.getCorrespondingSet(r.getResult(), r.getResult()).length; j++) {
+	    			int mat = VanillaItems.getCorrespondingSet(r.getResult(), r.getResult())[j];
 	        		if(itemBitmaps.get(mat) == null) {
 	        	        Bitmap bmap = BitmapFactory.decodeResource(getResources(), VanillaItems.getResourceIdFromItemId(mat), options);
 	        	        itemBitmaps.put(mat, bmap);
@@ -204,9 +204,6 @@ public class CraftingTableView extends ImageView {
 
     	this.r = r;
     	return this;
-    }
-    
-    private void getMultiMat() {
     }
 
 }
