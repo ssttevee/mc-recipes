@@ -24,7 +24,6 @@ public class CraftingTableView extends ImageView {
 	private Bitmap mFrame;
 	
 	private boolean stop = false;
-	private boolean thread_on = false;
 	private int matStep = 0;
 
 	public CraftingTableView(Context context) {
@@ -77,31 +76,31 @@ public class CraftingTableView extends ImageView {
         	canvas.drawBitmap(itemBitmaps.get(itemMats.get(9)[matStep % itemMats.get(9).length]), null, getItemLocById(-9), mPaint);
         }
 
-        
-        if(r.getMultiMat() && !thread_on) {
-        	new Thread(new Runnable() {
-				@Override
-				public void run() {
-					thread_on = true;
-					try {
-						while(!stop) {
-							Thread.sleep(1250);
-							postInvalidate();
-							if(matStep <= itemMats.valueAt(9).length - 2) matStep++;
-							else matStep = 0;
-						}
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+    }
+    
+    @Override
+    protected void onAttachedToWindow() {
+    	new Thread(new Runnable() {
+			@Override
+			public void run() {
+				stop = false;
+				try {
+					while(!stop && VanillaItems.hasMultiMats(r.getResult())) {
+						Thread.sleep(1250);
+						postInvalidate();
+						if(matStep <= itemMats.valueAt(9).length - 2) matStep++;
+						else matStep = 0;
 					}
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
-			}).start();
-        }
+			}
+		}).start();
     }
     
     @Override
     protected void onDetachedFromWindow() {
     	stop = true;
-    	thread_on = false;
     }
     
     private RectF getItemLocById(int id) {
