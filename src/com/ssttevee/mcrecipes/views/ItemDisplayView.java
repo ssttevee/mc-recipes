@@ -1,8 +1,10 @@
 package com.ssttevee.mcrecipes.views;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ssttevee.mcrecipes.R;
 import com.ssttevee.mcrecipes.helper.VanillaItems;
-import com.ssttevee.mcrecipes.recipe.Recipe;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,12 +13,13 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.SparseArray;
 import android.widget.ImageView;
 
 public class ItemDisplayView extends ImageView {
-	
-	private Bitmap itemBitmap;
+
+	private List<Bitmap> itemBitmap = new ArrayList<Bitmap>();
+	private int matStep = 0;
+	private boolean stop = false;
 
 	public ItemDisplayView(Context context) {
 		super(context);
@@ -32,40 +35,81 @@ public class ItemDisplayView extends ImageView {
 		super(context, attrs, defStyle);
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        int w = this.getMeasuredWidth();
+		int w = this.getMeasuredWidth();
 
-        setMeasuredDimension(w, w);
+		setMeasuredDimension(w, w);
 
 	}
+
+	@Override
+	protected void onDraw(final Canvas canvas)
+	{
+
+		Paint paint = new Paint();
+		paint.setDither(false);
+		paint.setAntiAlias(false);
+
+		canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.frame_item_display), null, new RectF(getLeft(), getTop(), getRight(), getMeasuredHeight()), null);
+
+		float pixel = getMeasuredHeight() / 20F;
+
+        
+        if(itemBitmap.size() > 1) {
+        	canvas.drawBitmap(itemBitmap.get(matStep % itemBitmap.size()), null, new RectF(getLeft() + (pixel * 4), getTop() + (pixel * 4), getRight() - (pixel * 4), getBottom() - (pixel * 4)), paint);
+        } else {
+        	canvas.drawBitmap(itemBitmap.get(0), null, new RectF(getLeft() + (pixel * 4), getTop() + (pixel * 4), getRight() - (pixel * 4), getBottom() - (pixel * 4)), paint);
+        }
+		
+	}
 	
-    @Override
-    protected void onDraw(final Canvas canvas)
-    {
-        
-        Paint paint = new Paint();
-        paint.setDither(false);
-        paint.setAntiAlias(false);
-        
-        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.frame_item_display), null, new RectF(getLeft(), getTop(), getRight(), getMeasuredHeight()), paint);
+	@Override
+	protected void onAttachedToWindow() {
+    	new Thread(new Runnable() {
+			@Override
+			public void run() {
+				stop = false;
+				try {
+					while(!stop) {
+						Thread.sleep(1250);
+						postInvalidate();
+						if(matStep <= itemBitmap.size() - 2) matStep++;
+						else matStep = 0;
+					}
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
+		super.onAttachedToWindow();
+	}
+	
+	@Override
+	protected void onDetachedFromWindow() {
+		stop = true;
+		super.onDetachedFromWindow();
+	}
 
-    	float pixel = getMeasuredHeight() / 20F;
-        canvas.drawBitmap(itemBitmap, null, new RectF(getLeft() + (pixel * 4), getTop() + (pixel * 4), getRight() - (pixel * 4), getBottom() - (pixel * 4)), paint);
+	public ItemDisplayView setItem(int id) {
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inDither = false;
+		options.inScaled = false;
 
-    }
-    
-    public ItemDisplayView setItem(int id) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inDither = false;
-        options.inScaled = false;
-    	
-        itemBitmap = BitmapFactory.decodeResource(getResources(), VanillaItems.getResourceIdFromItemId(id), options);
-
-    	return this;
-    }
+		if(!VanillaItems.hasMultiMats(id)) {
+			itemBitmap.add(BitmapFactory.decodeResource(getResources(), VanillaItems.getResourceIdFromItemId(id), options));
+		} else {
+    		for (int i = 0; i < VanillaItems.getCorrespondingSet(id, id).length; i++) {
+    			int mat = VanillaItems.getCorrespondingSet(id, id)[i];
+        	    itemBitmap.add(BitmapFactory.decodeResource(getResources(), VanillaItems.getResourceIdFromItemId(mat), options));
+			}
+		}
+		
+		invalidate();
+		return this;
+	}
 
 }
