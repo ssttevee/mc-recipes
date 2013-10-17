@@ -74,7 +74,7 @@ public class ItemDisplayView extends ImageView {
 			public void run() {
 				stop = false;
 				try {
-					while(!stop) {
+					while(!stop && itemBitmap.size() > 1) {
 						Thread.sleep(1250);
 						postInvalidate();
 						if(matStep <= itemBitmap.size() - 2) matStep++;
