@@ -176,33 +176,66 @@ public class VanillaItems {
 		items.append(ITEM_APPLE_GOLDEN, 	R.drawable.item_322);
 		items.append(ITEM_APPLE_GOLDEN, 	R.drawable.item_323);
 		
-		tools.add(256);
-		tools.add(257);
-		tools.add(258);
-		// TODO add rest of the tools
+		items.append(ITEM_LEATHER, 	R.drawable.item_334);
 		
-		for (int pick : ITEM_SET_TOOL_PICKAXE) {
-			pickaxes.add(pick);
-		}
 		
-		for (int mats : ITEM_SET_TOOL_MATS) {
-			tool_mats.add(mats);
-		}
+		recipes.append(ITEM_BOW, Recipe.RECIPE_ITEM_BOW);
+		recipes.append(ITEM_ARROW, Recipe.RECIPE_ITEM_ARROW);
+		recipes.append(ITEM_FLINT_STEEL, Recipe.RECIPE_ITEM_FLINT_STEEL);
 	}
 	
 	public static int getResourceIdFromItemId(int id) {
 		return items.get(id);	
 	}
 	
-	public static boolean isTool(int id) {
-		if(tools.contains(id)) return true;
+	public static boolean hasMultiMats(int id) {
+		if(Arrays.asList(ITEM_SET_TOOL_PICKAXE).contains(id)) return true;
+		else if(Arrays.asList(ITEM_SET_TOOL_SWORD).contains(id)) return true;
+		else if(Arrays.asList(ITEM_SET_TOOL_SHOVEL).contains(id)) return true;
+		else if(Arrays.asList(ITEM_SET_TOOL_AXE).contains(id)) return true;
+		else if(Arrays.asList(ITEM_SET_TOOL_HOE).contains(id)) return true;
+		else if(Arrays.asList(ITEM_SET_ARMOR_HEAD).contains(id)) return true;
+		else if(Arrays.asList(ITEM_SET_ARMOR_CHEST).contains(id)) return true;
+		else if(Arrays.asList(ITEM_SET_ARMOR_LEGS).contains(id)) return true;
+		else if(Arrays.asList(ITEM_SET_ARMOR_FEET).contains(id)) return true;
+		else if(Arrays.asList(ITEM_SET_ARMOR_MATS).contains(id)) return true;
+		else if(Arrays.asList(ITEM_SET_TOOL_MATS).contains(id)) return true;
 		else return false;
 	}
 	
-	public static int[] getCorrespondingSet(int id) {
-		if(pickaxes.contains(id)) return ITEM_SET_TOOL_PICKAXE;
-		else if(tool_mats.contains(id)) return ITEM_SET_TOOL_MATS;
-		else return null;
+	public static Integer[] getCorrespondingSet(int resultItem, int id) {
+		
+		if(Arrays.asList(ITEM_SET_TOOL_PICKAXE).contains(resultItem) || Arrays.asList(ITEM_SET_TOOL_SWORD).contains(resultItem) || Arrays.asList(ITEM_SET_TOOL_SHOVEL).contains(resultItem) || Arrays.asList(ITEM_SET_TOOL_AXE).contains(resultItem) || Arrays.asList(ITEM_SET_TOOL_HOE).contains(resultItem)) {
+			if(Arrays.asList(ITEM_SET_TOOL_PICKAXE).contains(id)) return ITEM_SET_TOOL_PICKAXE;
+			else if(Arrays.asList(ITEM_SET_TOOL_SWORD).contains(id)) return ITEM_SET_TOOL_SWORD;
+			else if(Arrays.asList(ITEM_SET_TOOL_SHOVEL).contains(id)) return ITEM_SET_TOOL_SHOVEL;
+			else if(Arrays.asList(ITEM_SET_TOOL_AXE).contains(id)) return ITEM_SET_TOOL_AXE;
+			else if(Arrays.asList(ITEM_SET_TOOL_HOE).contains(id)) return ITEM_SET_TOOL_HOE;
+			else if(Arrays.asList(ITEM_SET_TOOL_MATS).contains(id)) return ITEM_SET_TOOL_MATS;
+			else return null;
+		} else if(Arrays.asList(ITEM_SET_ARMOR_HEAD).contains(resultItem) || Arrays.asList(ITEM_SET_ARMOR_CHEST).contains(resultItem) || Arrays.asList(ITEM_SET_ARMOR_LEGS).contains(resultItem) || Arrays.asList(ITEM_SET_ARMOR_FEET).contains(resultItem)) {
+			if(Arrays.asList(ITEM_SET_ARMOR_HEAD).contains(id)) return ITEM_SET_ARMOR_HEAD;
+			else if(Arrays.asList(ITEM_SET_ARMOR_CHEST).contains(id)) return ITEM_SET_ARMOR_CHEST;
+			else if(Arrays.asList(ITEM_SET_ARMOR_LEGS).contains(id)) return ITEM_SET_ARMOR_LEGS;
+			else if(Arrays.asList(ITEM_SET_ARMOR_FEET).contains(id)) return ITEM_SET_ARMOR_FEET;
+			else if(Arrays.asList(ITEM_SET_ARMOR_MATS).contains(id)) return ITEM_SET_ARMOR_MATS;
+			else return null;
+		} else return null;
+	}
+	
+	public static Recipe getCorrespondingRecipe(int id) {
+		if(Arrays.asList(ITEM_SET_TOOL_PICKAXE).contains(id)) return Recipe.RECIPE_ITEM_PICKAXE;
+		else if(Arrays.asList(ITEM_SET_TOOL_SWORD).contains(id)) return Recipe.RECIPE_ITEM_SWORD;
+		else if(Arrays.asList(ITEM_SET_TOOL_SHOVEL).contains(id)) return Recipe.RECIPE_ITEM_SHOVEL;
+		else if(Arrays.asList(ITEM_SET_TOOL_AXE).contains(id)) return Recipe.RECIPE_ITEM_AXE;
+		else if(Arrays.asList(ITEM_SET_TOOL_HOE).contains(id)) return Recipe.RECIPE_ITEM_HOE;
+		else if(Arrays.asList(ITEM_SET_ARMOR_HEAD).contains(id)) return Recipe.RECIPE_ARMOR_HEAD;
+		else if(Arrays.asList(ITEM_SET_ARMOR_CHEST).contains(id)) return Recipe.RECIPE_ARMOR_CHEST;
+		else if(Arrays.asList(ITEM_SET_ARMOR_LEGS).contains(id)) return Recipe.RECIPE_ARMOR_LEGS;
+		else if(Arrays.asList(ITEM_SET_ARMOR_FEET).contains(id)) return Recipe.RECIPE_ARMOR_FEET;
+		else if(Arrays.asList(ITEM_SET_ARMOR_FEET).contains(id)) return Recipe.RECIPE_ARMOR_FEET;
+		else if(recipes.get(id) != null) return recipes.get(id);
+		else return new Recipe(0);
 	}
 
 	public VanillaItems() {
