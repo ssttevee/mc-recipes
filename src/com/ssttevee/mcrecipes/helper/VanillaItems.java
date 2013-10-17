@@ -1,8 +1,7 @@
 package com.ssttevee.mcrecipes.helper;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.Arrays;
+import android.util.SparseArray;
 import android.util.SparseIntArray;
 
 import com.ssttevee.mcrecipes.R;
@@ -11,23 +10,26 @@ import com.ssttevee.mcrecipes.R;
 public class VanillaItems {
 	
 	public static SparseIntArray items = new SparseIntArray();
+	public static SparseArray<Recipe> recipes = new SparseArray<Recipe>();
 	
-	public static List<Integer> pickaxes = new ArrayList<Integer>();
-	public static List<Integer> tools = new ArrayList<Integer>();
-	public static List<Integer> tool_mats = new ArrayList<Integer>();
-	public static List<Integer> armour_mats = new ArrayList<Integer>();
-	
-	public static int[] ITEM_SET_TOOL_MATS = 	new int[] {5, 4, 265, 264, 266}; // wood -> stone -> iron -> diamond -> gold
-	public static int[] ITEM_SET_TOOL_SWORD = 	new int[] {268, 272, 267, 276, 283};
-	public static int[] ITEM_SET_TOOL_SHOVEL = 	new int[] {269, 273, 256, 277, 284};
-	public static int[] ITEM_SET_TOOL_PICKAXE = new int[] {270, 274, 257, 278, 285};
-	public static int[] ITEM_SET_TOOL_AXE = 	new int[] {271, 275, 258, 279, 286};
-	public static int[] ITEM_SET_TOOL_HOE = 	new int[] {290, 291, 292, 293, 294};
+	public static Integer[] ITEM_SET_TOOL_MATS = 	new Integer[] {5, 4, 265, 264, 266}; // wood -> stone -> iron -> diamond -> gold
+	public static Integer[] ITEM_SET_TOOL_SWORD = 	new Integer[] {268, 272, 267, 276, 283};
+	public static Integer[] ITEM_SET_TOOL_SHOVEL = 	new Integer[] {269, 273, 256, 277, 284};
+	public static Integer[] ITEM_SET_TOOL_PICKAXE = new Integer[] {270, 274, 257, 278, 285};
+	public static Integer[] ITEM_SET_TOOL_AXE = 	new Integer[] {271, 275, 258, 279, 286};
+	public static Integer[] ITEM_SET_TOOL_HOE = 	new Integer[] {290, 291, 292, 293, 294};
+
+	public static Integer[] ITEM_SET_ARMOR_MATS = 	new Integer[] {334, 51, 265, 264, 266}; // leather -> fire -> iron -> diamond -> gold
+	public static Integer[] ITEM_SET_ARMOR_HEAD = 	new Integer[] {298, 302, 306, 310, 314};
+	public static Integer[] ITEM_SET_ARMOR_CHEST = 	new Integer[] {299, 303, 307, 311, 315};
+	public static Integer[] ITEM_SET_ARMOR_LEGS = 	new Integer[] {300, 304, 308, 312, 316};
+	public static Integer[] ITEM_SET_ARMOR_FEET = 	new Integer[] {301, 305, 309, 313, 317};
 	
 	public static int ITEM_AIR, ITEM_NULL = 0;
 	public static int ITEM_STONE = 1;
 	public static int ITEM_COBBLESTONE = 4;
 	public static int ITEM_WOOD_PLANKS = 5;
+	public static int ITEM_FIRE = 51;
 	public static int ITEM_IRON_SHOVEL = 256;
 	public static int ITEM_IRON_PICKAXE = 257;
 	public static int ITEM_IRON_AXE = 258;
@@ -73,7 +75,6 @@ public class VanillaItems {
 	public static int ITEM_LEATHER_CAP = 298;
 	public static int ITEM_LEATHER_CHESTPLATE = 299;
 	public static int ITEM_LEATHER_LEGS = 300;
-
 	public static int ITEM_LEATHER_BOOTS = 301;
 	public static int ITEM_CHAIN_HELMET = 302;
 	public static int ITEM_CHAIN_CHESTPLATE = 303;
@@ -98,11 +99,14 @@ public class VanillaItems {
 	public static int ITEM_APPLE_GOLDEN = 322;
 	public static int ITEM_SIGN = 323;
 	
+	public static int ITEM_LEATHER = 334;
+	
 	static {
 		
 		items.append(ITEM_AIR, 				R.drawable.item_000);
 		items.append(ITEM_COBBLESTONE, 		R.drawable.item_004);
 		items.append(ITEM_WOOD_PLANKS, 		R.drawable.item_005);
+		items.append(ITEM_FIRE, 			R.drawable.item_051);
 		items.append(ITEM_IRON_SHOVEL, 		R.drawable.item_256);
 		items.append(ITEM_IRON_PICKAXE, 	R.drawable.item_257);
 		items.append(ITEM_IRON_AXE, 		R.drawable.item_258);
@@ -125,8 +129,8 @@ public class VanillaItems {
 		items.append(ITEM_STONE_AXE,		R.drawable.item_275);
 		items.append(ITEM_DIAMOND_SWORD, 	R.drawable.item_276);
 		items.append(ITEM_DIAMOND_SHOVEL, 	R.drawable.item_277);
-		items.append(ITEM_DIAMOND_SHOVEL, 	R.drawable.item_278);
-		items.append(ITEM_DIAMOND_PICKAXE, 	R.drawable.item_279);
+		items.append(ITEM_DIAMOND_PICKAXE, 	R.drawable.item_278);
+		items.append(ITEM_DIAMOND_AXE, 		R.drawable.item_279);
 		items.append(ITEM_STICK, 			R.drawable.item_280);
 		items.append(ITEM_BOWL, 			R.drawable.item_281);
 		items.append(ITEM_MUSHROOM_STEW, 	R.drawable.item_282);
